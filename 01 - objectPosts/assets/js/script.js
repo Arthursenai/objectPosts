@@ -1,14 +1,30 @@
 const posts = [];
-
+let indexPost = -1;
 function savePost(){
     const title = document.getElementById('title').value;
     const resume  = document.getElementById('resume').value;    
     const publisher = document.getElementById('publisher').value;
     const date = document.getElementById('date').value;
-    if(title && resume && publisher && date){
-    storePost(title, resume, publisher, date)
-    }
+
+    if(indexPost == -1){
+        if(title && resume && publisher && date){
+    storePost(title, resume, publisher, date);
+    cleanFields();
     console.log(title, resume, publisher, date);
+}
+}else{
+    if(title && resume && publisher && date){
+        posts[indexPost] = {
+            title,
+            resume,
+            publisher,
+            date
+        };
+        showPosts();
+        indexPost = -1;
+        cleanFields();
+    }
+}
 }
 function storePost(title, resume, publisher, date){
     const post = {
@@ -37,5 +53,27 @@ function showPosts(){
         </div>
         `;
     })
-    document.getElementById("list").innerHTML = showContent
+    document.getElementById("list").innerHTML = showContent;
+}
+
+function cleanFields(){
+    document.getElementById('title').value="";
+    document.getElementById('resume').value="" ;
+    document.getElementById('publisher').value= "";
+    document.getElementById('date').value=" ";
+}
+function removePost(index){
+    posts.splice(index, 1);
+
+    showPosts();
+
+}
+function editPost(index){
+    indexPost = index;
+    const post = posts[index];
+    document.getElementById('title').value = post.title;
+    document.getElementById('resume').value = post.resume;
+    document.getElementById('publisher').value = post.publisher;
+    document.getElementById('date').value = post.date
+
 }
