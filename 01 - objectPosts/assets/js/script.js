@@ -15,6 +15,9 @@ function saveUser() {
         } else if (surname.length < 2) {
             indexUser = 1;
             problem.innerHTML = "Sobrenome inválido";
+        } else if (age < 0 || age > 134) {
+            indexUser = 1;
+            problem.innerHTML = "Idade inválida";
         } else if (indexUser === -1) {
             storeUser(name, surname, age, eyesColor);
             cleanFields();
@@ -30,9 +33,6 @@ function saveUser() {
             indexUser = -1;
             cleanFields();
         }
-    } else if (age < 0 || age > 134) {
-        indexUser = 1;
-        problem.innerHTML = "Idade inválida";
     } else {
         problem.innerHTML = "Preencha todos os campos corretamente";
     }
