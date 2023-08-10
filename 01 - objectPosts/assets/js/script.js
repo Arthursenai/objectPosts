@@ -1,79 +1,99 @@
-const posts = [];
-let indexPost = -1;
-function savePost(){
-    const title = document.getElementById('title').value;
-    const resume  = document.getElementById('resume').value;    
-    const publisher = document.getElementById('publisher').value;
-    const date = document.getElementById('date').value;
+const users = [];
+let indexUser = -1;
 
-    if(indexPost == -1){
-        if(title && resume && publisher && date){
-    storePost(title, resume, publisher, date);
-    cleanFields();
-    console.log(title, resume, publisher, date);
-}
-}else{
-    if(title && resume && publisher && date){
-        posts[indexPost] = {
-            title,
-            resume,
-            publisher,
-            date
-        };
-        showPosts();
-        indexPost = -1;
-        cleanFields();
+function saveUser() {
+    const name = document.getElementById('title').value;
+    const surname = document.getElementById('resume').value;
+    const age = document.getElementById('publisher').value;
+    const eyesColor = document.getElementById('date').value;
+    let problem = document.getElementById('vish');
+
+    if (name && surname && age >= 0 && age <= 134 && eyesColor) {
+        if (name.length < 2) {
+            indexUser = 1;
+            problem.innerHTML = "Nome inválido";
+        } else if (surname.length < 2) {
+            indexUser = 1;
+            problem.innerHTML = "Sobrenome inválido";
+        } else if (indexUser === -1) {
+            storeUser(name, surname, age, eyesColor);
+            cleanFields();
+            console.log(name, surname, age, eyesColor);
+        } else {
+            users[indexUser] = {
+                name,
+                surname,
+                age,
+                eyesColor
+            };
+            showusers();
+            indexUser = -1;
+            cleanFields();
+        }
+    } else if (age < 0 || age > 134) {
+        indexUser = 1;
+        problem.innerHTML = "Idade inválida";
+    } else {
+        problem.innerHTML = "Preencha todos os campos corretamente";
     }
 }
+
+
+function storeUser(name, surname, age, eyesColor) {
+    const User = {
+        name,
+        surname,
+        age,
+        eyesColor
+    };
+    users.push(User);
+    showusers();
 }
-function storePost(title, resume, publisher, date){
-    const post = {
-        title,
-        resume,
-        publisher,
-        date
-};
-posts.push(post);
-showPosts();
-}
 
-function showPosts(){
-    let showContent = " ";
+function showusers() {
+    document.getElementById("list").classList.remove("hidden");
 
-    posts.forEach((post, index) => {
-        showContent += `
-        <div class = "post"> 
-            <h2>${post.title}</h2>
-            <p><strong>Resumo:</strong> ${post.resume}</p>
-            <p><strong>Autor:</strong> ${post.publisher}</p>
-            <p><strong>Data de publicação:</strong> ${post.date}</p>
+    let showContent = "";
+    
+    if (users.length === 0) {
+        document.getElementById("list").classList.add("hidden");
+    } else {
+        users.forEach((User, index) => {
+            showContent += `
+            <div class="User">
+                <h2>Usuário: ${User.name}</h2>
+                <p><strong>Sobrenome do usuário:</strong> ${User.surname}</p>
+                <p><strong>Idade:</strong> ${User.age}</p>
+                <p><strong>Cor dos olhos:</strong> ${User.eyesColor}</p>
 
-            <button onclick = "editPost(${index})">Editar</button>
-            <button onclick = "removePost(${index})">Excluir</button>
-        </div>
-        `;
-    })
+                <button onclick="editUser(${index})">Editar</button>
+                <button onclick="removeUser(${index})">Excluir</button>
+            </div>
+            `;
+        });
+    }
+    
     document.getElementById("list").innerHTML = showContent;
 }
 
-function cleanFields(){
-    document.getElementById('title').value="";
-    document.getElementById('resume').value="" ;
-    document.getElementById('publisher').value= "";
-    document.getElementById('date').value=" ";
+function cleanFields() {
+    document.getElementById('title').value = "";
+    document.getElementById('resume').value = "";
+    document.getElementById('publisher').value = "";
+    document.getElementById('date').value = "";
+    document.getElementById('vish').innerHTML = "";
 }
-function removePost(index){
-    posts.splice(index, 1);
 
-    showPosts();
-
+function removeUser(index) {
+    users.splice(index, 1);
+    showusers();
 }
-function editPost(index){
-    indexPost = index;
-    const post = posts[index];
-    document.getElementById('title').value = post.title;
-    document.getElementById('resume').value = post.resume;
-    document.getElementById('publisher').value = post.publisher;
-    document.getElementById('date').value = post.date
 
+function editUser(index) {
+    indexUser = index;
+    const User = users[index];
+    document.getElementById('title').value = User.name;
+    document.getElementById('resume').value = User.surname;
+    document.getElementById('publisher').value = User.age;
+    document.getElementById('date').value = User.eyesColor;
 }
